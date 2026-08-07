@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFetchQuestion } from '../hooks/FetchQuestion'
 import { updateResult } from '../hooks/setResult'
 
-export default function Questions({ onChecked }) {
+export default function Questions({ onChecked, locked }) {
        
    const [checked, setChecked] = useState(undefined)
    const { trace } = useSelector(state => state.questions);
@@ -34,6 +34,7 @@ export default function Questions({ onChecked }) {
 
 
     function onSelect(i){
+        if(locked) return
         onChecked(i)
         setChecked(i)
         dispatch(updateResult({trace, checked}))
@@ -45,16 +46,18 @@ export default function Questions({ onChecked }) {
   return (
     <div className='questions'>
       <h2 className='text-light'>{questions?.question}</h2>
+      {locked && <div className='locked-banner'>Time's up! This answer is locked.</div>}
       <ul key={questions?.id}>
         {
           questions?.options.map((q, i) => (
             <li key={i}>
-            <input 
+            <input
 
             type="radio"
             value={false}
             name="options"
             id={`q${i}-option`}
+            disabled={locked}
             onChange={() => onSelect(i)}
             />
                

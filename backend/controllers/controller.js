@@ -16,7 +16,7 @@ export async function getQuestions(req, res){
 
 export async function insertQuestions(req, res){
     try {
-        const data = await Questions.insertMany({ questions, answers });
+        const data = await Questions.create({ questions, answers });
         res.json({ msg: "Data Saved Successfully...!", data });
     } catch (error) {
         res.json({ error })
@@ -36,19 +36,20 @@ export async function insertQuestions(req, res){
 
      export async function getResult(req, res){
         try {
-            const r = await Results.find();
+            const filter = req.query.email ? { email: req.query.email } : {};
+            const r = await Results.find(filter).sort({ createdAt: -1 });
             res.json(r)
         } catch (error) {
             res.json({ error })
         }
     }
-    
+
 
     export async function storeResult(req, res) {
         try {
-          const { username, result, attempts, points, achieved } = req.body;
-          if (!username || !result) throw new Error("Data Not Provided...!");
-          const data = await Results.create({ username, result, attempts, points, achieved });
+          const { username, email, result, attempts, points, achieved } = req.body;
+          if (!username || !email || !result) throw new Error("Data Not Provided...!");
+          const data = await Results.create({ username, email, result, attempts, points, achieved });
           res.json({ msg: "Result Saved Successfully...!", data });
         } catch (error) {
           res.json({ error: error.message });
@@ -63,5 +64,15 @@ export async function insertQuestions(req, res){
             res.json({ msg : "Result Deleted Successfully...!"})
         } catch (error) {
             res.json({ error })
+        }
+    }
+
+    export async function deleteResultById(req, res){
+        try {
+            const { id } = req.params;
+            await Results.findByIdAndDelete(id);
+            res.json({ msg : "Result Deleted Successfully...!"})
+        } catch (error) {
+            res.json({ error : error.message })
         }
     }

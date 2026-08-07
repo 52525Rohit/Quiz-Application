@@ -1,21 +1,18 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import '../styles/Main.css'
-import { useDispatch } from 'react-redux';
-import { setUserId } from '../Redux/result_reducer';
+import Toast from './Toast';
+import LogoutButton from './LogoutButton';
 
 export default function Main() {
-    const inputRef = useRef(null)
-     const dispatch = useDispatch()
-    function startQuiz (){
-      if(inputRef.current?.value){
-          dispatch(setUserId(inputRef.current?.value))
-      }
-    }
-
+  const location = useLocation();
+  const userId = useSelector(state => state.result.userId);
+  const [notice, setNotice] = useState(location.state?.loggedIn ? `Welcome, ${userId}! Login successful.` : null);
 
   return (
     <div className='container'>
+      <LogoutButton />
       <h1 className='title text-light'>Quiz Application</h1>
       <ol>
         <li>You will be asked 10 questions one after another.</li>
@@ -24,12 +21,11 @@ export default function Main() {
         <li>You can review and change answers before the quiz finish.</li>
         <li>The result will be declared at the end of the quiz.</li>
       </ol>
-      <form id="form">
-         <input ref={inputRef} type="text" placeholder='Username*' />
-      </form>
       <div className='start'>
-         <Link className='btn' to={'quiz'} onClick={startQuiz}>StartQuiz</Link>
+         <Link className='btn' to={'/quiz'}>StartQuiz</Link>
       </div>
+
+      <Toast message={notice} type='success' onClose={() => setNotice(null)} />
     </div>
   )
 }

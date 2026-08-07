@@ -28,7 +28,36 @@
 #form .userid{
     padding: .7em 2em;
     width: 50%;
+    box-sizing: border-box;
     border: none;
     border-radius: 3px;
     font-size: 1em;
+}
+
+.password-wrapper{
+    position: relative;
+    width: 50%;
+}
+
+#form .password-wrapper .userid{
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 2.6em;
+}
+
+.eye-toggle{
+    position: absolute;
+    top: 50%;
+    right: .6em;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    cursor: pointer;
+    color: var(--dark-color);
+}
+
+.eye-toggle:hover{
+    color: var(--primary-color);
 }

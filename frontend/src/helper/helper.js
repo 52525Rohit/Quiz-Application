@@ -30,4 +30,9 @@ export async function postServerData(url, result, callback){
     const data = await (await axios.post(url, result))?.data;
     return callback ? callback(data) : data;
 }
+
+export async function deleteServerData(url, callback){
+    const data = await (await axios.delete(url))?.data;
+    return callback ? callback(data) : data;
+}
  

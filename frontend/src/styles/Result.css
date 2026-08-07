@@ -47,5 +47,18 @@ table {
 }
 
 .table-header > tr > td{
-    border: 1px solid #faff5a;   
+    border: 1px solid #faff5a;
+}
+
+.delete-btn{
+    background: none;
+    border: none;
+    padding: 0;
+    color: #ff2a66;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.delete-btn:hover{
+    color: #c7253e;
 }

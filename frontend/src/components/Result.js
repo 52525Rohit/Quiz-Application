@@ -3,9 +3,10 @@ import '../styles/Result.css'
 import { Link } from 'react-router-dom'
 
 import ResultTable from './ResultTable';
+import LogoutButton from './LogoutButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetAllAction } from '../Redux/question_reducer';
-import { resetResultAction } from '../Redux/result_reducer';
+import { resetQuizResultAction } from '../Redux/result_reducer';
 import { attempts_Number, earnPoints_Number, flagResult } from '../helper/helper';
 import { usePublishResult } from '../hooks/setResult';
 
@@ -14,26 +15,28 @@ import { usePublishResult } from '../hooks/setResult';
 export default function Result() {
 
   const dispatch = useDispatch()
-  const { questions : { queue, answers}, result : {result, userId}} = useSelector(state => state)
+  const { questions : { queue, answers}, result : {result, userId, email}} = useSelector(state => state)
 
     const totalPoints = queue.length * 5;
     const attempts = attempts_Number(result);
     const earnPoints = earnPoints_Number(result, answers, 5)
     const flag = flagResult(totalPoints, earnPoints)
 
-    usePublishResult({ 
-      result, 
+    usePublishResult({
+      result,
       username : userId,
+      email,
       attempts,
       points: earnPoints,
-      achived : flag ? "Passed" : "Failed" });
+      achieved : flag ? "Passed" : "Failed" });
 
   function onRestart() {
     dispatch(resetAllAction())
-    dispatch(resetResultAction())
+    dispatch(resetQuizResultAction())
   }
   return (
     <div className='container'>
+      <LogoutButton />
       <h1 className='title text-light'>Quiz Application</h1>
 
       <div className='result flex-center'>
@@ -78,11 +81,12 @@ export default function Result() {
       </div>
 
       <div className='start'>
-        <Link className='btn' to={'/'} onClick={onRestart}>Restart</Link>
+        <Link className='btn' to={'/home'} onClick={onRestart}>Restart</Link>
       </div>
 
       <div className='container'>
-        <ResultTable></ResultTable>
+        <h2 className='text-light' style={{ textAlign: 'center' }}>Your Quiz History</h2>
+        <ResultTable email={email}></ResultTable>
 
       </div>
       

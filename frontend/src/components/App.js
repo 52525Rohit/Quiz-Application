@@ -1,27 +1,56 @@
+import "../styles/App.css";
 
-import '../styles/App.css';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
-import { createBrowserRouter,RouterProvider } from 'react-router-dom';
-
-import Main from './Main';
-import Quiz from './Quiz';
-import Result from './Result';
-import { CheckUserExist } from '../helper/helper';
+import Login from "./Login";
+import Signup from "./Signup";
+import Main from "./Main";
+import Quiz from "./Quiz";
+import Result from "./Result";
+import { CheckUserExist } from "../helper/helper";
 
 const router = createBrowserRouter([
   {
-    path : '/',
-    element : <Main></Main>
+    path: "/",
+    element: <Login></Login>,
   },
   {
-    path : '/quiz',
-    element : <CheckUserExist><Quiz /></CheckUserExist>
+    path: "/signup",
+    element: <Signup></Signup>,
   },
   {
-    path : '/result',
-    element : <CheckUserExist><Result /></CheckUserExist>
+    path: "/home",
+    element: (
+      <CheckUserExist>
+        <Main />
+      </CheckUserExist>
+    ),
   },
-])
+  {
+    path: "/quiz",
+    element: (
+      <CheckUserExist>
+        <Quiz />
+      </CheckUserExist>
+    ),
+  },
+  {
+    path: "/result",
+    element: (
+      <CheckUserExist>
+        <Result />
+      </CheckUserExist>
+    ),
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />,
+  },
+]);
 
 function App() {
   return (

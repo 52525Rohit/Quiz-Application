@@ -3,10 +3,11 @@ const { Schema } = mongoose;
 
 const resultModel = new Schema({
     username : { type : String },
+    email : { type : String },
     result : { type : Array, default : []},
     attempts : { type : Number, default : 0},
     points : { type : Number, default : 0},
-    achived : { type : String, default : ''},
+    achieved : { type : String, default : ''},
     createdAt : { type : Date, default : Date.now}
 })
 
