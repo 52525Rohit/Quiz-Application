@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Questions from "./Questions";
 
 import { MoveNextQuestion, MovePrevQuestion } from "../hooks/FetchQuestion";
@@ -37,22 +37,22 @@ export default function Quiz() {
   const dispatch = useDispatch();
   const isLocked = trace < activeIndex;
 
-  function advanceActiveQuestion() {
+  const advanceActiveQuestion = useCallback(() => {
     if (result.length <= activeIndex) {
       dispatch(PushAnswer(check));
     }
     setActiveIndex((i) => i + 1);
     setDeadline(Date.now() + QUESTION_TIME * 1000);
     setChecked(undefined);
-  }
+  }, [result.length, activeIndex, dispatch, check]);
 
-  function onNext() {
+  const onNext = useCallback(() => {
     if (trace >= queue.length) return;
     if (trace === activeIndex) {
       advanceActiveQuestion();
     }
     dispatch(MoveNextQuestion());
-  }
+  }, [trace, queue.length, activeIndex, advanceActiveQuestion, dispatch]);
 
   function onPrev() {
     if (trace > 0) {
@@ -86,7 +86,15 @@ export default function Quiz() {
       setTimeLeft(Math.max(0, Math.round((deadline - Date.now()) / 1000)));
     }, 1000);
     return () => clearTimeout(id);
-  }, [timeLeft, activeIndex, queue.length, trace, deadline]);
+  }, [
+    timeLeft,
+    activeIndex,
+    queue.length,
+    trace,
+    deadline,
+    onNext,
+    advanceActiveQuestion,
+  ]);
 
   if (result.length && result.length >= queue.length) {
     return <Navigate to={"/result"}>replace="true"</Navigate>;

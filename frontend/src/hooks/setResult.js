@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { postServerData } from "../helper/helper";
 import * as Action from "../Redux/result_reducer";
 
@@ -20,19 +20,22 @@ export const updateResult = (index) => async (dispatch) => {
 
 export const usePublishResult = (resultData) => {
   const { result, username, email } = resultData;
+  const resultDataRef = useRef(resultData);
+  resultDataRef.current = resultData;
 
   useEffect(() => {
     (async () => {
       try {
-        if (result !== [] && !username) throw new Error("Couldn't get Result");
+        if (result.length === 0 && !username)
+          throw new Error("Couldn't get Result");
         await postServerData(
           `${process.env.REACT_APP_API_URL}/api/result`,
-          resultData,
+          resultDataRef.current,
           (data) => data,
         );
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [username, email]);
+  }, [result, username, email]);
 };
