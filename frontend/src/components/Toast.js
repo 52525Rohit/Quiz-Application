@@ -20,7 +20,7 @@ export default function Toast({ message, type = 'error', onClose, duration = 300
       borderRadius: '6px',
       boxShadow: '0 2px 10px rgba(0,0,0,.4)',
       zIndex: 1000,
-      maxWidth: '320px',
+      maxWidth: 'min(320px, calc(100vw - 3em))',
     }}>
       {message}
     </div>

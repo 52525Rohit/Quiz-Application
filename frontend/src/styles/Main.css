@@ -1,5 +1,5 @@
 .container ol li{
-    font-size: 1.4em;
+    font-size: clamp(1em, 3.2vw, 1.4em);
     color: #cecece;
 }
 
@@ -27,7 +27,8 @@
 
 #form .userid{
     padding: .7em 2em;
-    width: 50%;
+    width: 100%;
+    max-width: 360px;
     box-sizing: border-box;
     border: none;
     border-radius: 3px;
@@ -36,7 +37,8 @@
 
 .password-wrapper{
     position: relative;
-    width: 50%;
+    width: 100%;
+    max-width: 360px;
 }
 
 #form .password-wrapper .userid{

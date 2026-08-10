@@ -2,22 +2,28 @@
 
 .flex-center{
     display: flex;
-    justify-content: center;    
+    justify-content: center;
     flex-direction: column;
     border: 1px solid #cecece;
-    padding: 3em 4em;
+    padding: clamp(1em, 5vw, 3em) clamp(1em, 6vw, 4em);
     gap: 1em;
 }
 
 .container .flex{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    
+    gap: 0.3em 1em;
 }
 
 .container .flex span {
-    font-size: 1.4em;
+    font-size: clamp(1em, 3.2vw, 1.4em);
     color: #cecece;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
 .container .flex span.achive {
@@ -28,6 +34,7 @@
 
 table {
     width: 100%;
+    min-width: 480px;
 }
 
 .table-header {
