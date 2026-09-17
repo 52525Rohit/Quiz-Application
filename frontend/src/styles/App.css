@@ -226,11 +226,11 @@ html {
 
 ul li {
   color: #00ffff;
-  display: block;
+  display: flex;
+  align-items: center;
   position: relative;
-  float: left;
   width: 100%;
-  min-height: 100px;
+  padding: 20px 0;
   border-bottom: 1px solid #333;
 }
 
@@ -244,9 +244,6 @@ ul li label {
   position: relative;
   font-weight: 300;
   font-size: clamp(1em, 3.2vw, 1.35em);
-  padding: 25px 20px 25px 65px;
-  margin: 10px auto;
-  min-height: 30px;
   z-index: 9;
   cursor: pointer;
   -webkit-transition: all 0.25s linear;
@@ -258,13 +255,14 @@ ul li:hover label {
 
 ul li .check {
   display: block;
-  position: absolute;
+  position: relative;
+  order: -1;
+  flex-shrink: 0;
   border: 5px solid #02b186;
   border-radius: 100%;
   height: 25px;
   width: 25px;
-  top: 30px;
-  left: 20px;
+  margin: 0 20px;
   z-index: 5;
   transition: border 0.25s linear;
   -webkit-transition: border 0.25s linear;
@@ -279,8 +277,8 @@ ul li .check::before {
   position: absolute;
   content: "";
   border-radius: 100%;
-  height: 15px;
-  width: 15px;
+  height: 9px;
+  width: 9px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

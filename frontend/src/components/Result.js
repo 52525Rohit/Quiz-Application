@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/Result.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import ResultTable from "./ResultTable";
 import LogoutButton from "./LogoutButton";
@@ -16,29 +16,36 @@ import { usePublishResult } from "../hooks/setResult";
 
 export default function Result() {
   const dispatch = useDispatch();
-  const {
-    questions: { queue, answers },
-    result: { result, userId, email },
-  } = useSelector((state) => state);
+  const { queue, answers } = useSelector((state) => state.questions);
+  const { result, userId, email } = useSelector((state) => state.result);
 
   const totalPoints = queue.length * 5;
   const attempts = attempts_Number(result);
   const earnPoints = earnPoints_Number(result, answers, 5);
   const flag = flagResult(totalPoints, earnPoints);
+  const hasCompletedQuiz = queue.length > 0 && result.length >= queue.length;
 
-  usePublishResult({
-    result,
-    username: userId,
-    email,
-    attempts,
-    points: earnPoints,
-    achieved: flag ? "Passed" : "Failed",
-  });
+  usePublishResult(
+    {
+      result,
+      username: userId,
+      email,
+      attempts,
+      points: earnPoints,
+      achieved: flag ? "Passed" : "Failed",
+    },
+    hasCompletedQuiz,
+  );
 
   function onRestart() {
     dispatch(resetAllAction());
     dispatch(resetQuizResultAction());
   }
+
+  if (!hasCompletedQuiz) {
+    return <Navigate to={"/home"} replace />;
+  }
+
   return (
     <div className="container">
       <LogoutButton />

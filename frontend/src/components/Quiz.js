@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Questions from "./Questions";
 
 import { MoveNextQuestion, MovePrevQuestion } from "../hooks/FetchQuestion";
-import { PushAnswer } from "../hooks/setResult";
+import { updateResult } from "../hooks/setResult";
 
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -36,15 +36,17 @@ export default function Quiz() {
   const { queue, trace } = useSelector((state) => state.questions);
   const dispatch = useDispatch();
   const isLocked = trace < activeIndex;
+  const handledDeadlineRef = useRef(null);
 
   const advanceActiveQuestion = useCallback(() => {
-    if (result.length <= activeIndex) {
-      dispatch(PushAnswer(check));
+    if (result[activeIndex] === undefined) {
+      dispatch(updateResult({ trace: activeIndex, checked: check }));
     }
     setActiveIndex((i) => i + 1);
     setDeadline(Date.now() + QUESTION_TIME * 1000);
+    setTimeLeft(QUESTION_TIME);
     setChecked(undefined);
-  }, [result.length, activeIndex, dispatch, check]);
+  }, [result, activeIndex, dispatch, check]);
 
   const onNext = useCallback(() => {
     if (trace >= queue.length) return;
@@ -75,6 +77,8 @@ export default function Quiz() {
       return;
     }
     if (timeLeft <= 0) {
+      if (handledDeadlineRef.current === deadline) return;
+      handledDeadlineRef.current = deadline;
       if (trace === activeIndex) {
         onNext();
       } else {
@@ -96,7 +100,7 @@ export default function Quiz() {
     advanceActiveQuestion,
   ]);
 
-  if (result.length && result.length >= queue.length) {
+  if (queue.length > 0 && result.length >= queue.length) {
     return <Navigate to={"/result"}>replace="true"</Navigate>;
   }
 

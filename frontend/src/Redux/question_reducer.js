@@ -1,23 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const TRACE_KEY = 'quizTrace'
+const QUEUE_KEY = 'quizQueue'
 
 function loadStoredTrace(){
     const saved = Number(localStorage.getItem(TRACE_KEY))
     return Number.isInteger(saved) && saved >= 0 ? saved : 0
 }
 
+function loadStoredQueue(){
+    try {
+        return JSON.parse(localStorage.getItem(QUEUE_KEY)) || { queue: [], answers: [] }
+    } catch {
+        return { queue: [], answers: [] }
+    }
+}
+
+const storedQueue = loadStoredQueue()
+
 export const questionReducer = createSlice({
     name: 'questions',
     initialState : {
-        queue: [],
-        answers: [],
+        queue: storedQueue.queue,
+        answers: storedQueue.answers,
         trace: loadStoredTrace()
     },
 
     reducers : {
         startExamAction : (state, action) => {
             let { question, answers } = action.payload
+            localStorage.setItem(QUEUE_KEY, JSON.stringify({ queue: question, answers }))
             return{
                ...state,
                queue : question, answers
@@ -43,6 +55,7 @@ export const questionReducer = createSlice({
         resetAllAction : () => {
             localStorage.removeItem(TRACE_KEY)
             localStorage.removeItem('quizTimer')
+            localStorage.removeItem(QUEUE_KEY)
             return {
                 queue: [],
                 answers: [],

@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { api } from "../api/client";
 
 export function attempts_Number(result){
-return result.filter(r => r !== undefined).length;
+return result.filter(r => r !== undefined && r !== null).length;
 }
 
 

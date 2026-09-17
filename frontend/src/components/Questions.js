@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useFetchQuestion } from "../hooks/FetchQuestion";
 import { updateResult } from "../hooks/setResult";
 
 export default function Questions({ onChecked, locked }) {
-  const [checked, setChecked] = useState(undefined);
   const { trace } = useSelector((state) => state.questions);
   const result = useSelector((state) => state.result.result);
-  const [{ isLoading, serverError }] = useFetchQuestion(); // apiData removed (unused)
+  const [{ isLoading, serverError }] = useFetchQuestion();
 
   const questions = useSelector(
     (state) => state.questions.queue[state.questions.trace],
@@ -16,15 +15,10 @@ export default function Questions({ onChecked, locked }) {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(updateResult({ trace, checked }));
-  }, [checked, trace, dispatch]); // added missing deps
-
   function onSelect(i) {
     if (locked) return;
     onChecked(i);
-    setChecked(i);
-    dispatch(updateResult({ trace, checked: i })); // fixed: use `i`, not stale `checked`
+    dispatch(updateResult({ trace, checked: i }));
   }
 
   if (isLoading) return <h3 className="text-light">isLoading</h3>;

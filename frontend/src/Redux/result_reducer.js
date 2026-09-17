@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const USER_KEY = 'quizUser'
 const RESULT_KEY = 'quizResult'
+const PUBLISHED_KEY = 'quizResultPublished'
 
 function loadStoredUser(){
     try {
@@ -35,20 +36,16 @@ export const resultReducer = createSlice({
             localStorage.setItem(USER_KEY, JSON.stringify({ fullName: action.payload.fullName, email: action.payload.email }))
         },
 
-        pushResultAction : (state, action) => {
-            state.result.push(action.payload)
-            localStorage.setItem(RESULT_KEY, JSON.stringify(state.result))
-        },
-
         updateResultAction : (state, action) => {
           const { trace, checked } = action.payload;
-          state.result.fill(checked, trace, trace +1)
+          state.result[trace] = checked
           localStorage.setItem(RESULT_KEY, JSON.stringify(state.result))
         },
 
         resetResultAction : () => {
             localStorage.removeItem(USER_KEY)
             localStorage.removeItem(RESULT_KEY)
+            localStorage.removeItem(PUBLISHED_KEY)
             return {
                 userId : null,
                 email : null,
@@ -59,9 +56,10 @@ export const resultReducer = createSlice({
         resetQuizResultAction : (state) => {
             state.result = []
             localStorage.removeItem(RESULT_KEY)
+            localStorage.removeItem(PUBLISHED_KEY)
         }
     }
 })
 
-export const { setUserId, pushResultAction, resetResultAction, resetQuizResultAction, updateResultAction } = resultReducer.actions;
+export const { setUserId, resetResultAction, resetQuizResultAction, updateResultAction } = resultReducer.actions;
 export default resultReducer.reducer;
