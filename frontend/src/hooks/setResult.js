@@ -29,7 +29,7 @@ export const usePublishResult = (resultData) => {
         if (result.length === 0 && !username)
           throw new Error("Couldn't get Result");
         await postServerData(
-          `${process.env.REACT_APP_API_URL}/api/result`,
+          `/api/result`,
           resultDataRef.current,
           (data) => data,
         );

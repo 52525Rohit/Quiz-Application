@@ -7,7 +7,7 @@ export function useAuth() {
 
   async function login(email, password) {
     const data = await postServerData(
-      `${process.env.REACT_APP_API_URL}/api/login`,
+      `/api/login`,
       {
         email,
         password,
@@ -19,7 +19,7 @@ export function useAuth() {
 
   async function signup(fullName, email, password, confirmPassword) {
     const data = await postServerData(
-      `${process.env.REACT_APP_API_URL}/api/signup`,
+      `/api/signup`,
       {
         fullName,
         email,

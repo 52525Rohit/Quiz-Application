@@ -18,7 +18,7 @@ export const useFetchQuestion = () => {
     (async () => {
       try {
         const [{ questions, answers }] = await getServerData(
-          `${process.env.REACT_APP_API_URL}/api/questions`,
+          `/api/questions`,
           (data) => data,
         );
 

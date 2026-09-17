@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import axios from 'axios'
+import { api } from "../api/client";
 
 export function attempts_Number(result){
 return result.filter(r => r !== undefined).length;
@@ -21,18 +21,18 @@ export function CheckUserExist({ children }){
 }
 
 export async function getServerData(url, callback){
-   const data = await (await axios.get(url))?.data;
+   const data = await (await api.get(url))?.data;
    return callback ? callback(data) : data;
 }
 
 
 export async function postServerData(url, result, callback){
-    const data = await (await axios.post(url, result))?.data;
+    const data = await (await api.post(url, result))?.data;
     return callback ? callback(data) : data;
 }
 
 export async function deleteServerData(url, callback){
-    const data = await (await axios.delete(url))?.data;
+    const data = await (await api.delete(url))?.data;
     return callback ? callback(data) : data;
 }
  

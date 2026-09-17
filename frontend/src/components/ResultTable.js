@@ -8,8 +8,8 @@ export default function ResultTable({ email }) {
 
   useEffect(() => {
     const url = email
-      ? `${process.env.REACT_APP_API_URL}/api/result?email=${encodeURIComponent(email)}`
-      : `${process.env.REACT_APP_API_URL}/api/result`;
+      ? `/api/result?email=${encodeURIComponent(email)}`
+      : `/api/result`;
     getServerData(url, (res) => {
       setData(res);
     });
@@ -18,7 +18,7 @@ export default function ResultTable({ email }) {
   async function confirmDelete() {
     const id = pendingDeleteId;
     setPendingDeleteId(null);
-    await deleteServerData(`${process.env.REACT_APP_API_URL}/api/result/${id}`);
+    await deleteServerData(`/api/result/${id}`);
     setData((prev) => prev.filter((v) => v._id !== id));
   }
 
